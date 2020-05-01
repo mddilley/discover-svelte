@@ -3,8 +3,6 @@ import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import livereload from "rollup-plugin-livereload";
 import { terser } from "rollup-plugin-terser";
-import { config } from "dotenv";
-import replace from "@rollup/plugin-replace";
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -17,6 +15,7 @@ export default {
     file: "public/build/bundle.js"
   },
   plugins: [
+    commonjs(),
     svelte({
       // enable run-time checks when not in production
       dev: !production,
@@ -25,15 +24,6 @@ export default {
       css: css => {
         css.write("public/build/bundle.css");
       }
-    }),
-    replace({
-      // stringify the object
-      process: JSON.stringify({
-        env: {
-          isProd: true,
-          ...config().parsed // attached the .env config
-        }
-      })
     }),
 
     // If you have external dependencies installed from
@@ -45,7 +35,6 @@ export default {
       browser: true,
       dedupe: ["svelte"]
     }),
-    commonjs(),
 
     // In dev mode, call `npm run start` once
     // the bundle has been generated
