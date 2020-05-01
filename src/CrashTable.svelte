@@ -44,10 +44,10 @@
       <tbody>
         {#each result.data.atd_txdot_crashes as crash}
           <tr>
-            <th scope="row">{crash.crash_id}</th>
+            <th scope="row">{crash.crash_id || 'Not available'}</th>
             <td>{crash.case_id || 'Not available'}</td>
-            <td>{crash.crash_date}</td>
-            <td>{crash.address_confirmed_primary}</td>
+            <td>{crash.crash_date || 'Not available'}</td>
+            <td>{crash.address_confirmed_primary || 'Not available'}</td>
             <td>{crash.sus_serious_injry_cnt}</td>
             <td>{crash.death_cnt}</td>
           </tr>
