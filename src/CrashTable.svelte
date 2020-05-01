@@ -2,26 +2,59 @@
   import { gql } from "apollo-boost";
   const crashQuery = gql`
     query GetCrashes {
-      atd_txdot_crashes(limit: 100, where: { city_id: { _eq: 22 } }) {
+      atd_txdot_crashes(
+        limit: 100
+        order_by: { death_cnt: desc }
+        where: { city_id: { _eq: 22 } }
+      ) {
         crash_id
+        case_id
+        crash_date
+        address_confirmed_primary
+        sus_serious_injry_cnt
+        death_cnt
       }
     }
   `;
   import { getClient, query } from "svelte-apollo";
+  import { Table, Container, Spinner } from "sveltestrap";
 
   const client = getClient();
 
   const crashes = query(client, { query: crashQuery });
 </script>
 
-<h1>Crash Table Test</h1>
-{#await $crashes}
-  Loading...
-{:then result}
-  {#each result.data.atd_txdot_crashes as crash}
-    {crash.crash_id}
-    <br />
-  {/each}
-{:catch error}
-  Error: {error}
-{/await}
+<Container class="text-center">
+  <h1 class="mb-3">Crashes</h1>
+  {#await $crashes}
+    <Spinner class="mt-5" />
+    <h3 class="mt-2 pl-4">Loading...</h3>
+  {:then result}
+    <Table>
+      <thead>
+        <tr>
+          <th>Crash ID</th>
+          <th>Case Number</th>
+          <th>Crash Date</th>
+          <th>Primary Address</th>
+          <th>Serious Injury Count</th>
+          <th>Fatality Count</th>
+        </tr>
+      </thead>
+      <tbody>
+        {#each result.data.atd_txdot_crashes as crash}
+          <tr>
+            <th scope="row">{crash.crash_id}</th>
+            <td>{crash.case_id || 'Not available'}</td>
+            <td>{crash.crash_date}</td>
+            <td>{crash.address_confirmed_primary}</td>
+            <td>{crash.sus_serious_injry_cnt}</td>
+            <td>{crash.death_cnt}</td>
+          </tr>
+        {/each}
+      </tbody>
+    </Table>
+  {:catch error}
+    Error: {error}
+  {/await}
+</Container>

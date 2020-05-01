@@ -2,9 +2,10 @@
   export let name;
   import ApolloClient from "apollo-boost";
   import { setClient } from "svelte-apollo";
-  import Form from "./Form.svelte";
   import CrashTable from "./CrashTable.svelte";
   const ENDPOINT = "https://vzd-staging.austinmobility.io/v1/graphql";
+  import { Table, Container } from "sveltestrap";
+  let src = "/vz-logo.png";
 
   const client = new ApolloClient({
     uri: ENDPOINT,
@@ -38,13 +39,12 @@
   }
 </style>
 
-<main>
-  <h1>Hello {name}!</h1>
-  <p>
-    Visit the
-    <a href="https://svelte.dev/tutorial">Svelte tutorial</a>
-    to learn how to build Svelte apps.
-  </p>
-</main>
-<CrashTable />
-<Form />
+<svelte:head>
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+</svelte:head>
+<Container class="text-center">
+  <img class="mb-4" alt="Vision Zero Logo" {src} />
+  <CrashTable />
+</Container>
